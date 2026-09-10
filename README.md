@@ -1,36 +1,59 @@
 # PID-Based Line Follower Robot
 
-## Overview
+An autonomous line-following robot built using Arduino, an Adafruit Motor Shield, five IR line sensors, and two DC motors. The robot uses PD control to continuously detect and follow a black line while handling curves, sharp turns, and temporary line loss.
 
-A sensor-based autonomous line follower robot developed using Arduino, an Adafruit Motor Shield, five IR line sensors, and two DC motors.
+---
 
-The robot detects the position of a line using an array of five sensors and adjusts the speed and direction of the motors to follow the path. A PD control approach is used for smooth steering, along with dedicated logic for sharp turns and line-loss recovery.
+## 📌 Project Overview
 
-## Features
+The objective of this project is to design and develop an autonomous line follower robot capable of following a predefined black path without manual control.
 
-- 5-sensor line detection
+Five IR line sensors are arranged at the front of the robot to detect the position of the line. Based on the sensor readings, the controller calculates the deviation of the robot from the desired path and adjusts the speed of the left and right motors accordingly.
+
+A **Proportional-Derivative (PD) control algorithm** is used to achieve responsive and stable steering. Additional logic is implemented for sharp turns and line-loss recovery.
+
+---
+
+## ✨ Features
+
+- 5-sensor IR line detection
 - PD-based steering control
 - Adjustable proportional and derivative gains
-- Sharp 90-degree turn handling
+- Smooth correction during normal line tracking
+- Sharp 90° turn handling
 - High-speed pivot control
-- Last-direction memory when the line is lost
-- Motor speed limiting for stable operation
+- Last-direction memory for line-loss recovery
+- Motor speed limiting
+- Autonomous operation
+- Tested on curved line-following tracks
 
-## Hardware
+---
 
-- Arduino-compatible microcontroller
-- Adafruit Motor Shield
-- 2 DC motors
-- 5 digital line sensors
-- Robot chassis
-- Battery/power supply
+## 🔧 Hardware Components
 
-## Software
+| Component | Quantity |
+|---|---:|
+| Arduino-compatible microcontroller | 1 |
+| Adafruit Motor Shield | 1 |
+| DC Motors | 2 |
+| IR Line Sensors | 5 |
+| Robot Chassis | 1 |
+| Battery / Power Supply | 1 |
+| Connecting Wires | As required |
 
-- Arduino IDE
-- Adafruit Motor Shield library (`AFMotor`)
+---
 
-## Control Parameters
+## 💻 Software & Libraries
+
+- **Arduino IDE**
+- **Arduino C/C++**
+- **Adafruit Motor Shield Library (`AFMotor`)**
+
+---
+
+## ⚙️ Control Parameters
+
+The current controller uses the following parameters:
 
 | Parameter | Value |
 |---|---:|
@@ -41,26 +64,17 @@ The robot detects the position of a line using an array of five sensors and adju
 | Pivot Speed | 220 |
 | Maximum Speed | 255 |
 
-> Note: Although `Ki` is defined in the program, the current implementation does not accumulate an integral term. Therefore, the implemented controller is effectively a PD controller.
+> **Note:** Although `Ki` is defined in the program, the current implementation does not accumulate an integral term. Therefore, the implemented controller is effectively a **PD controller**.
 
-## How It Works
+---
 
-The five sensors continuously detect the position of the line.
+## 🧠 Working Principle
 
-The controller assigns an error based on which sensor detects the line:
+The five IR sensors continuously monitor the surface beneath the robot and determine the position of the black line.
 
-- Left-side detection → negative error
-- Center detection → zero error
-- Right-side detection → positive error
-
-The controller calculates the steering correction using the proportional and derivative terms.
-
-For sharp left or right detection, the robot switches from smooth steering to a pivot motion. If all sensors lose the line, the robot uses the last known direction to search for the line.
-
-## Project Structure
+The sensor arrangement can be represented as:
 
 ```text
-pid-line-follower-robot/
-├── README.md
-└── src/
-    └── line_follower.ino
+S1    S2    S3    S4    S5
+ |     |     |     |     |
+ ←──────── LINE ─────────→
